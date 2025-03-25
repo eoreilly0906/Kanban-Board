@@ -1,45 +1,52 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import auth from '../utils/auth';
+import AuthService from '../services/authService';
 
 const Navbar = () => {
-  const [ loginCheck, setLoginCheck ] = useState(false);
-
-  const checkLogin = () => {
-    if(auth.loggedIn()) {
-      setLoginCheck(true);
-    }
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    console.log(loginCheck);
-    checkLogin();
-  }, [loginCheck])
+    // Check authentication status
+    const checkAuth = () => {
+      setIsAuthenticated(AuthService.isAuthenticated());
+    };
+
+    // Initial check
+    checkAuth();
+
+    // Set up interval to check auth status
+    const interval = setInterval(checkAuth, 1000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleLogout = () => {
+    AuthService.logout();
+    window.location.href = '/login';
+  };
 
   return (
-    <div className='nav'>
-      <div className='nav-title'>
-        <Link to='/'>Krazy Kanban Board</Link>
+    <nav className="navbar">
+      <div className="navbar-brand">
+        <Link to="/" className="navbar-title">Krazy Kanban Board</Link>
       </div>
-      <ul>
-      {
-        !loginCheck ? (
-          <li className='nav-item'>
-            <button type='button'>
-              <Link to='/login'>Login</Link>
-            </button>
-          </li>
+      <div className="navbar-menu">
+        {!isAuthenticated ? (
+          <Link to="/login" className="navbar-button">
+            Login
+          </Link>
         ) : (
-          <li className='nav-item'>
-            <button type='button' onClick={() => {
-              auth.logout();
-            }}>Logout</button>
-          </li>
-        )
-      }
-      </ul>
-    </div>
-  )
-}
+          <button 
+            className="navbar-button"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        )}
+      </div>
+    </nav>
+  );
+};
 
 export default Navbar;
