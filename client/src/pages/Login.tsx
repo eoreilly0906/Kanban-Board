@@ -1,9 +1,11 @@
 import { useState, FormEvent, ChangeEvent } from "react";
-
-import Auth from '../utils/auth';
+import { useNavigate } from "react-router-dom";
+import AuthService from '../services/authService';
 import { login } from "../api/authAPI";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
   const [loginData, setLoginData] = useState({
     username: '',
     password: ''
@@ -19,11 +21,15 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError(null);
+    
     try {
       const data = await login(loginData);
-      Auth.login(data.token);
+      AuthService.handleLoginResponse(data);
+      navigate('/');
     } catch (err) {
       console.error('Failed to login', err);
+      setError(err instanceof Error ? err.message : 'Login failed');
     }
   };
 
@@ -31,24 +37,30 @@ const Login = () => {
     <div className='container'>
       <form className='form' onSubmit={handleSubmit}>
         <h1>Login</h1>
-        <label >Username</label>
+        {error && (
+          <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>
+            {error}
+          </div>
+        )}
+        <label>Username</label>
         <input 
           type='text'
           name='username'
           value={loginData.username || ''}
           onChange={handleChange}
+          required
         />
-      <label>Password</label>
+        <label>Password</label>
         <input 
           type='password'
           name='password'
           value={loginData.password || ''}
           onChange={handleChange}
+          required
         />
         <button type='submit'>Submit Form</button>
       </form>
     </div>
-    
   )
 };
 

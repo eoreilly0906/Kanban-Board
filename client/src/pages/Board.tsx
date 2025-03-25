@@ -6,8 +6,7 @@ import ErrorPage from './ErrorPage';
 import Swimlane from '../components/Swimlane';
 import { TicketData } from '../interfaces/TicketData';
 import { ApiMessage } from '../interfaces/ApiMessage';
-
-import auth from '../utils/auth';
+import AuthService from '../services/authService';
 
 const boardStates = ['Todo', 'In Progress', 'Done'];
 
@@ -17,7 +16,7 @@ const Board = () => {
   const [loginCheck, setLoginCheck] = useState(false);
 
   const checkLogin = () => {
-    if(auth.loggedIn()) {
+    if(AuthService.isAuthenticated()) {
       setLoginCheck(true);
     }
   };
@@ -67,9 +66,12 @@ const Board = () => {
         </div>  
       ) : (
           <div className='board'>
-            <button type='button' id='create-ticket-link'>
-              <Link to='/create' >New Ticket</Link>
-            </button>
+            <div className="board-header">
+              <h1>Kanban Board</h1>
+              <button type='button' id='create-ticket-link'>
+                <Link to='/create'>New Ticket</Link>
+              </button>
+            </div>
             <div className='board-display'>
               {boardStates.map((status) => {
                 const filteredTickets = tickets.filter(ticket => ticket.status === status);

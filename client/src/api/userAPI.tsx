@@ -1,11 +1,11 @@
-import Auth from '../utils/auth';
+import AuthService from '../services/authService';
 
 const retrieveUsers = async () => {
   try {
     const response = await fetch('/api/users', {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${Auth.getToken()}`
+        Authorization: `Bearer ${AuthService.getAccessToken()}`
       }
     });
     const data = await response.json();
