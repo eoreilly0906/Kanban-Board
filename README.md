@@ -33,11 +33,11 @@ https://coding-boot-camp.github.io/full-stack/render/render-deployment-guide
 
 ## Screenshots of app
 
-### Screenshot 1
-<img src="" alt="" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
+### Login Page
+<img src="/assets/Login.png" alt="Login Page" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
 
-### Screenshot 2
-<img src="" alt="" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
+### Ticket Page
+<img src="/assets/TicketPage.png" alt="Ticket Page" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
 
-### Screenshot 3
-<img src="" alt="" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
+### Create A Ticket Page
+<img src="/assets/CreateTicket.png" alt="Create Ticket Page" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
