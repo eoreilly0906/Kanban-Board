@@ -26,19 +26,31 @@ const sequelize = new Sequelize(formattedUrl, {
   dialectOptions: isProduction ? {
     ssl: {
       require: true,
-      rejectUnauthorized: false
+      rejectUnauthorized: false // This is needed for self-signed certificates
     }
   } : {}
 });
 
+// Test the connection with retries
+const testConnection = async (retries = 5): Promise<void> => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await sequelize.authenticate();
+      console.log('Database connection established successfully.');
+      return;
+    } catch (err) {
+      console.error(`Connection attempt ${i + 1} failed:`, err);
+      if (i === retries - 1) {
+        console.error('Unable to connect to the database after all retries:', err);
+        process.exit(1);
+      }
+      // Wait 5 seconds before retrying
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+  }
+};
+
 // Test the connection
-sequelize.authenticate()
-  .then(() => {
-    console.log('Database connection established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-    process.exit(1);
-  });
+testConnection();
 
 export { sequelize }; 
