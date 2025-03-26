@@ -13,6 +13,7 @@ if (!databaseUrl) {
 
 console.log('Connecting to database...');
 console.log('Environment:', isProduction ? 'production' : 'development');
+console.log('Database URL:', databaseUrl.replace(/\/\/[^:]+:[^@]+@/, '//****:****@')); // Log URL without credentials
 
 const sequelize = new Sequelize(databaseUrl, {
   dialect: 'postgres',
