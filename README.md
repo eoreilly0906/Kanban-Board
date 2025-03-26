@@ -33,11 +33,11 @@ https://coding-boot-camp.github.io/full-stack/render/render-deployment-guide
 
 ## Screenshots of app
 
-### Candidate Search Page
+### Screenshot 1
 <img src="" alt="" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
 
-### Saved Candidates Page
+### Screenshot 2
 <img src="" alt="" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
 
-### Saved Candidates page 2
+### Screenshot 3
 <img src="" alt="" width="600" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
