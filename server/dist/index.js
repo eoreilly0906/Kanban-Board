@@ -34,28 +34,22 @@ const initializeDatabase = async () => {
         // Test database connection
         await sequelize.authenticate();
         console.log('Database connection established successfully');
-        // Sync database schema
-        await sequelize.sync({ force: false });
+        // Force sync in production to ensure tables are created
+        console.log('Syncing database schema...');
+        await sequelize.sync({ force: true }); // Force sync to ensure clean state
         console.log('Database schema synced successfully');
-        // Check if we need to seed
+        // Always seed in production
+        console.log('Starting seed process...');
+        await seedAll();
+        console.log('Database seeded successfully');
+        // Verify seeding
         const userCount = await User.count();
-        console.log(`Current user count: ${userCount}`);
-        if (userCount === 0) {
-            console.log('No users found, starting seed process...');
-            await seedAll();
-            console.log('Database seeded successfully');
-            // Verify seeding
-            const newUserCount = await User.count();
-            console.log(`New user count after seeding: ${newUserCount}`);
-            // Log seeded users
-            const users = await User.findAll({
-                attributes: ['id', 'username']
-            });
-            console.log('Seeded users:', users.map(u => u.username));
-        }
-        else {
-            console.log('Database already has users, skipping seed');
-        }
+        console.log(`Final user count: ${userCount}`);
+        // Log seeded users
+        const users = await User.findAll({
+            attributes: ['id', 'username']
+        });
+        console.log('Seeded users:', users.map(u => u.username));
         console.log('\n----- DATABASE INITIALIZATION COMPLETED -----\n');
     }
     catch (error) {
@@ -64,6 +58,10 @@ const initializeDatabase = async () => {
         // Log the full error stack
         if (error instanceof Error) {
             console.error('Error stack:', error.stack);
+        }
+        // Exit in production if database initialization fails
+        if (process.env.NODE_ENV === 'production') {
+            process.exit(1);
         }
     }
 };

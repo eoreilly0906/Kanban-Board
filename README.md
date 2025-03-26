@@ -2,14 +2,14 @@
 As a member of an agile team, I want a Kanban board with a secure login page. I can securely access and manage my work tasks 
 
 ## Render Link to app:
-
+https://kanban-board-pl8a.onrender.com/
 
 ## How It's Made:
 Using React, Javescript, HTML and CSS inplementation in React.
 Using Render to deploy and VS Code to build
 
 
-**Tech used:**  React, Node, Love and affection
+**Tech used:**  React, Node, Typescript, CSS, Love and affection
 
 
 **Github:** <https://github.com/eoreilly0906>

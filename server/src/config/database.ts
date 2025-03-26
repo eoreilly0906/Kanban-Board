@@ -4,9 +4,18 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const isProduction = process.env.NODE_ENV === 'production';
+const databaseUrl = process.env.DATABASE_URL;
 
-const sequelize = new Sequelize(process.env.DATABASE_URL || 'sqlite::memory:', {
-  dialect: isProduction ? 'postgres' : 'sqlite',
+if (!databaseUrl) {
+  console.error('DATABASE_URL environment variable is not set!');
+  process.exit(1);
+}
+
+console.log('Connecting to database...');
+console.log('Environment:', isProduction ? 'production' : 'development');
+
+const sequelize = new Sequelize(databaseUrl, {
+  dialect: 'postgres',
   logging: false,
   dialectOptions: isProduction ? {
     ssl: {
@@ -23,6 +32,7 @@ sequelize.authenticate()
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
+    process.exit(1);
   });
 
 export { sequelize }; 
