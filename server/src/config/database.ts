@@ -19,7 +19,11 @@ const sequelize = new Sequelize(databaseUrl, {
   dialect: 'postgres',
   logging: false,
   dialectOptions: isProduction ? {
-    ssl: true
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    },
+    native: true
   } : {}
 });
 
