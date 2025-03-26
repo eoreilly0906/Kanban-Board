@@ -2,7 +2,7 @@ import { seedUsers } from './user-seeds.js';
 import { seedTickets } from './ticket-seeds.js';
 import { sequelize } from '../models/index.js';
 
-const seedAll = async (): Promise<void> => {
+export const seedAll = async (): Promise<void> => {
   try {
     await sequelize.sync({ force: true });
     console.log('\n----- DATABASE SYNCED -----\n');
@@ -20,4 +20,7 @@ const seedAll = async (): Promise<void> => {
   }
 };
 
-seedAll();
+// Only run if this file is being run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  seedAll();
+}
