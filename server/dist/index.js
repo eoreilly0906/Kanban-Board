@@ -30,10 +30,13 @@ app.get('*', (_req, res) => {
 // Database sync and seed
 const initializeDatabase = async () => {
     try {
-        console.log('Starting database initialization...');
-        // Always use force: false to prevent data loss
+        console.log('\n----- STARTING DATABASE INITIALIZATION -----\n');
+        // Test database connection
+        await sequelize.authenticate();
+        console.log('Database connection established successfully');
+        // Sync database schema
         await sequelize.sync({ force: false });
-        console.log('Database synced successfully');
+        console.log('Database schema synced successfully');
         // Check if we need to seed
         const userCount = await User.count();
         console.log(`Current user count: ${userCount}`);
@@ -53,11 +56,15 @@ const initializeDatabase = async () => {
         else {
             console.log('Database already has users, skipping seed');
         }
+        console.log('\n----- DATABASE INITIALIZATION COMPLETED -----\n');
     }
     catch (error) {
+        console.error('\n----- DATABASE INITIALIZATION ERROR -----\n');
         console.error('Error initializing database:', error);
-        // Don't exit in production, just log the error
-        console.error('Database initialization error:', error);
+        // Log the full error stack
+        if (error instanceof Error) {
+            console.error('Error stack:', error.stack);
+        }
     }
 };
 // Initialize database before starting the server

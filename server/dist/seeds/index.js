@@ -3,17 +3,22 @@ import { seedTickets } from './ticket-seeds.js';
 import { sequelize } from '../models/index.js';
 export const seedAll = async () => {
     try {
-        await sequelize.sync({ force: true });
-        console.log('\n----- DATABASE SYNCED -----\n');
+        console.log('\n----- STARTING SEED PROCESS -----\n');
+        // Sync database first
+        await sequelize.sync({ force: false });
+        console.log('Database synced successfully');
+        // Seed users
         await seedUsers();
         console.log('\n----- USERS SEEDED -----\n');
+        // Seed tickets
         await seedTickets();
         console.log('\n----- TICKETS SEEDED -----\n');
-        process.exit(0);
+        console.log('\n----- SEED PROCESS COMPLETED -----\n');
     }
     catch (error) {
+        console.error('\n----- ERROR DURING SEEDING -----\n');
         console.error('Error seeding database:', error);
-        process.exit(1);
+        throw error;
     }
 };
 // Only run if this file is being run directly
