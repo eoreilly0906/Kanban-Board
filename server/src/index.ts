@@ -39,11 +39,8 @@ const initializeDatabase = async (): Promise<void> => {
   try {
     console.log('Starting database initialization...');
     
-    // Force sync in production to ensure tables are created
-    const forceSync = process.env.NODE_ENV === 'production';
-    console.log(`Database sync mode: ${forceSync ? 'force' : 'normal'}`);
-    
-    await sequelize.sync({ force: forceSync });
+    // Always use force: false to prevent data loss
+    await sequelize.sync({ force: false });
     console.log('Database synced successfully');
     
     // Check if we need to seed
@@ -69,11 +66,8 @@ const initializeDatabase = async (): Promise<void> => {
     }
   } catch (error) {
     console.error('Error initializing database:', error);
-    // In production, we might want to retry or handle this differently
-    if (process.env.NODE_ENV === 'production') {
-      console.error('Critical database initialization error in production');
-      process.exit(1);
-    }
+    // Don't exit in production, just log the error
+    console.error('Database initialization error:', error);
   }
 };
 
