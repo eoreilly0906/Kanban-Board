@@ -11,21 +11,30 @@ if (!databaseUrl) {
   process.exit(1);
 }
 
-console.log('Connecting to database...');
-console.log('Environment:', isProduction ? 'production' : 'development');
-console.log('Database URL:', databaseUrl.replace(/\/\/[^:]+:[^@]+@/, '//****:****@')); // Log URL without credentials
-
-const sequelize = new Sequelize(databaseUrl, {
-  dialect: 'postgres',
+// Parse the database URL
+const url = new URL(databaseUrl);
+const dbConfig = {
+  host: url.hostname,
+  port: parseInt(url.port),
+  database: url.pathname.slice(1),
+  username: url.username,
+  password: url.password,
+  dialect: 'postgres' as const,
   logging: false,
   dialectOptions: isProduction ? {
     ssl: {
       require: true,
       rejectUnauthorized: false
-    },
-    native: true
+    }
   } : {}
-});
+};
+
+console.log('Connecting to database...');
+console.log('Environment:', isProduction ? 'production' : 'development');
+console.log('Database host:', dbConfig.host);
+console.log('Database name:', dbConfig.database);
+
+const sequelize = new Sequelize(dbConfig);
 
 // Test the connection with retries
 const testConnection = async (retries = 5): Promise<void> => {
