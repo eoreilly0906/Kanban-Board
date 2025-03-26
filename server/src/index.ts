@@ -39,16 +39,27 @@ const initializeDatabase = async (): Promise<void> => {
   try {
     console.log('\n----- STARTING DATABASE INITIALIZATION -----\n');
     
-    // Test database connection
-    await sequelize.authenticate();
-    console.log('Database connection established successfully');
+    // Test database connection with retries
+    let retries = 5;
+    while (retries > 0) {
+      try {
+        await sequelize.authenticate();
+        console.log('Database connection established successfully');
+        break;
+      } catch (error) {
+        retries--;
+        if (retries === 0) throw error;
+        console.log(`Connection attempt failed, retrying... (${retries} attempts left)`);
+        await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds before retrying
+      }
+    }
     
-    // Force sync in production to ensure tables are created
+    // Sync database schema
     console.log('Syncing database schema...');
     await sequelize.sync({ force: true }); // Force sync to ensure clean state
     console.log('Database schema synced successfully');
     
-    // Always seed in production
+    // Seed database
     console.log('Starting seed process...');
     await seedAll();
     console.log('Database seeded successfully');

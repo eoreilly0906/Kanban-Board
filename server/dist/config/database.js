@@ -7,10 +7,14 @@ if (!databaseUrl) {
     console.error('DATABASE_URL environment variable is not set!');
     process.exit(1);
 }
+// Ensure the database URL has the correct format
+const formattedUrl = databaseUrl.includes('?')
+    ? databaseUrl
+    : `${databaseUrl}?sslmode=require`;
 console.log('Connecting to database...');
 console.log('Environment:', isProduction ? 'production' : 'development');
-console.log('Database URL:', databaseUrl.replace(/\/\/[^:]+:[^@]+@/, '//****:****@')); // Log URL without credentials
-const sequelize = new Sequelize(databaseUrl, {
+console.log('Database URL:', formattedUrl.replace(/\/\/[^:]+:[^@]+@/, '//****:****@')); // Log URL without credentials
+const sequelize = new Sequelize(formattedUrl, {
     dialect: 'postgres',
     logging: false,
     dialectOptions: isProduction ? {
