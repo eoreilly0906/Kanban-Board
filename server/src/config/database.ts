@@ -11,10 +11,12 @@ if (!databaseUrl) {
   process.exit(1);
 }
 
-// Ensure the database URL has the correct format
-const formattedUrl = databaseUrl.includes('?') 
-  ? databaseUrl 
-  : `${databaseUrl}?sslmode=require`;
+// Parse the database URL to add SSL parameters
+const url = new URL(databaseUrl);
+url.searchParams.set('sslmode', 'require');
+url.searchParams.set('ssl', 'true');
+
+const formattedUrl = url.toString();
 
 console.log('Connecting to database...');
 console.log('Environment:', isProduction ? 'production' : 'development');
@@ -24,10 +26,8 @@ const sequelize = new Sequelize(formattedUrl, {
   dialect: 'postgres',
   logging: false,
   dialectOptions: isProduction ? {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false // This is needed for self-signed certificates
-    }
+    ssl: true,
+    native: true
   } : {}
 });
 
