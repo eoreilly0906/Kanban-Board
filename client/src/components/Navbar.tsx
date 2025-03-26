@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/authService';
 
 const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check authentication status
@@ -23,7 +24,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     AuthService.logout();
-    window.location.href = '/login';
+    navigate('/login', { replace: true });
   };
 
   return (
