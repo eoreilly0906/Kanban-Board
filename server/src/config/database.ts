@@ -26,8 +26,10 @@ const sequelize = new Sequelize(formattedUrl, {
   dialect: 'postgres',
   logging: false,
   dialectOptions: isProduction ? {
-    ssl: true,
-    native: true
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   } : {}
 });
 
