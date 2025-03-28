@@ -49,7 +49,7 @@ const initializeDatabase = async () => {
         }
         // Sync database schema
         console.log('Syncing database schema...');
-        await sequelize.sync({ force: true }); // Force sync to ensure clean state
+        await sequelize.sync(); // Removed force: true to prevent data loss
         console.log('Database schema synced successfully');
         // Seed database
         console.log('Starting seed process...');
